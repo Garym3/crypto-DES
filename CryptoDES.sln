@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "CryptoDES", "CryptoDES\CryptoDES.pyproj", "{3713B130-01E0-4A36-8E4D-B4D865727E78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3713B130-01E0-4A36-8E4D-B4D865727E78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3713B130-01E0-4A36-8E4D-B4D865727E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2EE6167F-A611-45F7-A961-F8DF48201144}
+	EndGlobalSection
+EndGlobal
