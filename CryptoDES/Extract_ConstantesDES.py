@@ -1,3 +1,7 @@
+#Matrice nulle à l ligne et c colonne
+def MatZero(l, c):
+    return [[[] for x in range(0, c)] for x in range(0, l)]
+
 #Récupère un tableau associatif avec les constantes du chiffrement DES
 def recupConstantesDES() :
 	f=open("ConstantesDES.txt", "r")
@@ -8,6 +12,7 @@ def recupConstantesDES() :
 	
 	X=dict()
 	
+	print("Permutation initiale")
 	#Permutation initiale
 	clef="PI"
 	X[clef]=MatZero(1, 64) 
@@ -18,14 +23,14 @@ def recupConstantesDES() :
 	deb+=1
 	while(deb<fin) :
 		X[clef][0][col]=0
-		while(ord('0')<=ord(txt[deb])<=ord('9') and deb<fin) : 
+		while(ord('0')<=ord(txt[deb])<=ord('9') and deb<fin) :
 			X[clef][0][col]=10*X[clef][0][col]+int(txt[deb])
 			deb+=1
 		X[clef][0][col]-=1#Car les entiers sont entre 1 et 64
 		while(not(ord('0')<=ord(txt[deb])<=ord('9')) and deb<fin) : deb+=1
-		
 		col+=1
-		
+	
+	print("Permutation initiale inverse")
 	#Permutation initiale inverse
 	clef="PI_I"
 	X[clef]=MatZero(1, 64)
@@ -43,8 +48,9 @@ def recupConstantesDES() :
 		while(not(ord('0')<=ord(txt[deb])<=ord('9')) and deb<fin) : deb+=1
 		
 		col+=1
-		
-	#Fonction d'expantion
+	
+	print("Fonction d'expansion")
+	#Fonction d'expansion
 	clef="E"
 	X[clef]=MatZero(1, 48)
 	deb=txt.find(clef+' =')
@@ -62,6 +68,7 @@ def recupConstantesDES() :
 		
 		col+=1
 	
+	print("Permutation")
 	#Permutation
 	clef="PERM"
 	X[clef]=MatZero(1, 32)
@@ -80,6 +87,7 @@ def recupConstantesDES() :
 		
 		col+=1
 	
+	print("Première permutation des clefs")
 	#Première permutation des clefs
 	clef="CP_1"
 	X[clef]=MatZero(1, 56)
@@ -99,6 +107,7 @@ def recupConstantesDES() :
 		col+=1
 	
 	
+	print("Seconde permutation des clefs")
 	#Seconde permutation des clefs
 	clef="CP_2"
 	X[clef]=MatZero(1, 48)
@@ -117,6 +126,7 @@ def recupConstantesDES() :
 		
 		col+=1
 	
+	print("Les 8 fonctions de substitution (numéroté de 0 à 7)")
 	#Les 8 fonctions de substitution (numéroté de 0 à 7)
 	clef="S"
 	X[clef]=dict()
