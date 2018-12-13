@@ -27,7 +27,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Extract_ConstantesDES.py" />
-    <Compile Include="module1.py">
+    <Compile Include="Utils.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
