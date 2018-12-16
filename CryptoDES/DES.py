@@ -2,9 +2,8 @@ from Extract_ConstantesDES import recupConstantesDES
 from ConvAlphaBin import *
 from Utils import *
 
-constDES = recupConstantesDES()
 
-############ SUBKEY GENERATION ############
+constDES = recupConstantesDES()
 
 def cp1_conversion(cp1, key_64bits):
 	""" Converts a 64 bits key into a 56 bits key """
@@ -16,15 +15,15 @@ def cp1_conversion(cp1, key_64bits):
 
 	return key_56bits
 
-def split_key_in_half(key):
-	""" Splits the key in half """
-	left_key = key[:28]
-	right_key = key[28:]
-	return left_key, right_key
-
-def left_shifting(bits, nb_bits):
-	""" Left shifts the given bit string according to the number of bits """
-	return bits[nb_bits:] + bits[:nb_bits]
+def left_shifting(dictionary) :
+	shifted_dict = dict()
+	
+	for i in range(0, len(dictionary)) :
+		previous = i - 1
+		if previous == -1 : previous = len(dictionary) - 1
+		shifted_dict[previous] = dictionary[i]
+		
+	return shifted_dict
 
 def cp2_conversion(cp2, key_56bits):
 	""" Combines both half as input and returns a 48 bits string """
@@ -36,24 +35,41 @@ def cp2_conversion(cp2, key_56bits):
 
 	return key_48bits
 
-def generate_keys(key_64bits):
-	round_shifts = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
+def get_keys(key) :
+	dict_key = string_to_dict(key)
+	permuted_key = permute_dicts(key, constDES["CP_1"][0])
 
-	rounded_keys = list() 
-	converted_cp1 = cp1_conversion(constDES["CP_1"], key_64bits) 
-	left, right = split_in_half(converted_cp1)
+	keys = dict()
+	(left, right) = split_dict_in_half(permuted_key)
+	
+	for i in range(1, 17) :
+		new_left = left_shifting(left)
+		new_right = left_shifting(right)
 
-	for round in range(16):
-		new_left = left_shifting(left, round_shifts[round])
-		new_right = left_shifting(right, round_shifts[round])
-		rounded_key = cp2_conversion(constDES["CP_2"], new_left + new_right)
-		rounded_keys.append(rounded_key)
-		left = new_left
-		right = new_right
+		temp_matrix = merge_two_dicts(new_left, new_right)
+		permuted_temp_key = permute_dicts(temp_matrix, constDES["CP_2"][0])
+		keys[i] = permuted_temp_key
+	
+	return keys
 
-	return rounded_keys
-
-############ END SUBKEY GENERATION ############
+def get_packets(bin_message) :
+	packets = dict()
+	index = -1
+	
+	for i in range(0, len(bin_message)) :
+		if(i == 0 or i % 64 == 0) :
+			index+=1
+			packets[index] = dict()
+		packets[index][i % 64] = bin_message[i]
+	
+	nb_packets = len(packets)
+	length_last_packet = len(packets[nb_packets - 1])
+	
+	if(length_last_packet != 64) :
+		for i in range (length_last_packet, 64) :
+			packets[nb_packets - 1][i] = 0
+		
+	return packets
 
 def expand(expansion_table, bits_32):
 	""" Takes a 32-bits binary string as input and outputs a 48-bits binary string"""
@@ -74,9 +90,6 @@ def XOR(bits1, bits2):
 		else:
 			output += '1'
 	return output
-
-def split_in(nb_bits, XOR_48bits):
-	return [XOR_48bits[i:i + nb_bits] for i in range(0, len(XOR_48bits), nb_bits)]
 
 def permute(permutation_table, S):
 	""" Takes the S output and the permutation table and returns a 32 bits binary string """
@@ -102,6 +115,54 @@ def start(expansion_table, permutation_table, key_32bits, key_48bits):
 
 	return permute(permutation_table, result)
 
+def circle(left, right, key) :
+	new_right = XOR(permute_dicts(right, const["E"][0]), key)	
+	blocks = get_blocks(new_right)
+	
+	for i in range(0, len(blocks)) :
+		blocks[i] = handle_block(blocks[i], const["S"][i])
+
+	index_right = 0		
+	new_right = dict()
+	
+	for i in range(0, len(blocks)) :
+		for j in range(0, len(blocks[i])) :
+			new_right[index_right] = blocks[i][j]
+			index_right += 1
+			
+	new_right = XOR(permute_dicts(new_right, const["PERM"][0]), key)
+	
+	return right, new_right
+
+def handle_block(block, s_box) :
+	temp = ""
+	line = int(str(block[0]) + str(block[5]), 2)
+
+	for i in range(1, 5): temp += str(block[i])
+
+	column = int(temp, 2)	
+	nb = decimal_to_binary(s_box[line][column])
+	
+	blocks = dict()
+	
+	for i in range(0, len(nb)): blocks[i] = nb[i]
+	
+	return blocks
+
+def get_blocks(matrix) :
+	blocks = dict()
+	pos = 0
+	blocks[pos]=dict()
+	
+	for i in range(0, len(matrix)) :
+		if i != 0 and i % 6 == 0 :
+			pos += 1
+			blocks[pos] = dict()
+			
+		blocks[pos][i % 6] = matrix[i]
+
+	return blocks
+
 def S_search(nb_S, first_to_last, mid_4bits):  
 	""" Takes three parameters, accesses the S matrix and returns the value """
 	dec_first_to_last = binary_to_decimal(first_to_last)
@@ -109,57 +170,32 @@ def S_search(nb_S, first_to_last, mid_4bits):
 	
 	return decimal_to_binary(constDES[nb_S][dec_first_to_last][dec_mid_4bits])
 
-def apply_initial_p(PI_I, text):
+def apply_initial_permutation(PI_I, text):
 	cipher = ""
+
 	for i in PI_I:
 		cipher += text[int(i)]
-		print(cipher)
 
 	return cipher
 
-def split_in_half(binary_bits):
-	return binary_bits[:32],binary_bits[32:]
-
 def DES_encrypt(message, key):
-	subKeys = getSubKeys(key)
-	packets = getPacketsFromBinaryString(binaryString)
+	bin_message = conv_bin(message)
+
+	keys = get_keys(key)
+	packets = get_packets(bin_message)
 	
 	for i in range(0, len(packets)) :
-		packets[i] = permuteTwoMatrix(packets[i], const["PI"][0])
-		(left, right) = splitDict(packets[i]) 
+		packets[i] = permute_dicts(packets[i], const["PI"][0])
+		(left, right) = split_in_half(packets[i]) 
 		
-		for j in range(0, 16) :
-			(left, right) = ronde(left, right, subKeys[j+1])
+		for j in range(0, 16): (left, right) = circle(left, right, keys[j + 1])
 		
-		packets[i] = concatenateDicts(left, right)
-		packets[i] = permuteTwoMatrix(packets[i], const["PI_I"][0])
+		packets[i] = merge_bits(left, right)
+		packets[i] = permute_dicts(packets[i], const["PI_I"][0])
 		
-		for j in range(0, len(packets[i])) :
-			s+=str(packets[i][j])
+		for j in range(0, len(packets[i])): s += str(packets[i][j])
+
 	return s
-
-
-	#cipher = ""
-	## Convert hex digits to binary
-	#plaintext_bits = conv_bin(message)
-	#key_bits = conv_bin(key)
-	## Generate rounds key
-	#round_keys = generate_keys(key_bits)
-	##### DES steps
-	
-	### initial permutation
-	#p_plaintext = apply_initial_p(constDES["PI_I"][0], plaintext_bits)
-	### split in two half
-	#L, R = split_in_half(p_plaintext)
-	### start rounds
-	#for round in range(16):
-	#	newR = XOR(L, start(R, round_keys[round]))
-	#	newL = R
-	#	R = newR
-	#	L = newL
-	#return apply_initial_p(INVERSE_PERMUTATION_TABLE, R+L)
-
-
 
 path = "C:/Users/Olivier/source/repos/CryptoDES/CryptoDES/Input/"
 
@@ -171,9 +207,8 @@ f2 = open(path + "MDES1.txt", "r")
 mdes = f2.read()
 f2.close()
 
-#print(constDES["PI_I"][0])
 
-print(DES_encrypt("0123456789ABCDEF", "12345678ABCEDFF9"))
+print(DES_encrypt(mdes, key))
 
 
 #key_56bits = cp1_conversion(constDES["CP_1"], key)
