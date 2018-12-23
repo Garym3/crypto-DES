@@ -12,7 +12,7 @@ def binary_to_decimal(binary_bits):
 
 def decimal_to_binary(decimal):
 	""" Converts decimal to binary bits """
-	return bin(decimal)[2:].zfill(4)
+	return bin(decimal).replace("0b","").zfill(4)
 
 def string_to_dict(text):
 	dictionary = dict()
@@ -36,10 +36,8 @@ def split_dict_in_half(dictionary):
 	right_half = dict()
 	
 	for i in dictionary :
-		if(i < half_length) :
-			left_half[i] = dictionary[i]
-		else :
-			right_half[i % half_length] = dictionary[i]
+		if(i < half_length): left_half[i] = dictionary[i]
+		else: right_half[i % half_length] = dictionary[i]
 			
 	return left_half, right_half
 

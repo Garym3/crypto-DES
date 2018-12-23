@@ -76,4 +76,4 @@ def nib_vnoc(txt) :
 	return res
 
 #Ce test ne fait rien
-# print(nib_vnoc(conv_bin("Je teste au stérone !? ^_^")))
+#print(nib_vnoc(conv_bin("Je teste au stérone !? ^_^")))
