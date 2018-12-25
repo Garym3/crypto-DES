@@ -119,7 +119,7 @@ def handle_block(block, s_box) :
 def get_blocks(matrix) :
 	blocks = dict()
 	pos = 0
-	blocks[pos]=dict()
+	blocks[pos] = dict()
 	
 	for i in range(0, len(matrix)) :
 		if i != 0 and i % 6 == 0 :
@@ -170,19 +170,19 @@ def DES_decrypt(message, key):
 
 	return nib_vnoc(dec)
 
-path = "C:/Users/Olivier/source/repos/CryptoDES/CryptoDES/Input/"
+#path = "C:/Users/Olivier/source/repos/CryptoDES/CryptoDES/Input/"
 
-f1 = open(path + "Clef_de_Kaamelot.txt", "r")
-key = f1.read()
-f1.close()
+#f1 = open(path + "Clef_de_Kaamelot.txt", "r")
+#key = f1.read()
+#f1.close()
 
-f2 = open(path + "Chiffrement_DES_de_Kaamelot.txt", "r")
-mdes = f2.read()
-f2.close()
+#f2 = open(path + "Chiffrement_DES_de_Kaamelot.txt", "r")
+#mdes = f2.read()
+#f2.close()
 
-original = mdes
-decrypted = DES_decrypt(mdes, key)
-encrypted = DES_encrypt(decrypted, key)
+#original = mdes
+#decrypted = DES_decrypt(mdes, key)
+#encrypted = DES_encrypt(decrypted, key)
 
-print(original == mdes)
-print(encrypted == original)
+#print(original == mdes)
+#print(encrypted == original)
