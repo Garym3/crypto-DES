@@ -70,7 +70,7 @@ def XOR(bits1, bits2):
 	
 	return output
 
-### Processes the right part of the key and permutes it ###
+### Processes the right part of the key and permutes ###
 def process_right(right, key) :
 	new_right = XOR(permute_dicts(right, constDES["E"][0]), key)	
 	blocks = get_blocks(new_right)
@@ -91,7 +91,7 @@ def process_right(right, key) :
 	return new_right
 
 
-###  ###
+### For ciphering ###
 def circle(left, right, key) :
 	new_right = process_right(right, key)
 		
@@ -100,6 +100,7 @@ def circle(left, right, key) :
 	return right, new_right
 
 
+### For deciphering ###
 def uncircle(left, right, key) :
 	old_right = process_right(left, key)
 	
@@ -108,6 +109,7 @@ def uncircle(left, right, key) :
 	return old_left, left
 
 
+### Processes a block according to the related S box ###
 def handle_block(block, s_box) :
 	temp = ""
 	line = int(str(block[0]) + str(block[5]), 2)
@@ -123,6 +125,8 @@ def handle_block(block, s_box) :
 	
 	return blocks
 
+
+### Get blocks from matrice ###
 def get_blocks(matrix) :
 	blocks = dict()
 	pos = 0
@@ -137,6 +141,8 @@ def get_blocks(matrix) :
 
 	return blocks
 
+
+### Ciphering ###
 def DES_encrypt(message, key):
 	bin_message = conv_bin(message)
 	keys = get_keys(key)
@@ -157,6 +163,8 @@ def DES_encrypt(message, key):
 
 	return nib_vnoc(enc)
 
+
+### Deciphering ###
 def DES_decrypt(message, key):
 	bin_message = conv_bin(message)
 	keys = get_keys(key)
@@ -176,6 +184,8 @@ def DES_decrypt(message, key):
 		for j in range(0, len(packets[i])): dec += str(packets[i][j])
 
 	return nib_vnoc(dec)
+
+### TEST SECTION ###
 
 #path = "C:/Users/Olivier/source/repos/CryptoDES/CryptoDES/Input/"
 
