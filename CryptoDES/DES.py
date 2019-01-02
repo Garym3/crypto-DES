@@ -5,7 +5,7 @@ from Utils import *
 
 constDES = recupConstantesDES()
 
-
+### Shifts a bit to the left ###
 def left_shifting(dictionary) :
 	shifted_dict = dict()
 	
@@ -16,6 +16,8 @@ def left_shifting(dictionary) :
 		
 	return shifted_dict
 
+
+### Permutes and splits the key into a subset of 16 keys then permutes them ###
 def get_keys(key) :
 	dict_key = string_to_dict(key)
 	permuted_key = permute_dicts(dict_key, constDES["CP_1"][0])
@@ -33,6 +35,8 @@ def get_keys(key) :
 	
 	return keys
 
+
+### "Packages" the binary message into packets of 64 bits each. The ones that are not of 64 bits will be completed with zeros ###
 def get_packets(bin_message) :
 	packets = dict()
 	index = -1
@@ -52,6 +56,8 @@ def get_packets(bin_message) :
 		
 	return packets
 
+
+### XOR operation on two bits. Returns a dictionary representing the binary result of the XOR operation ###
 def XOR(bits1, bits2):
 	output = dict()
 	
@@ -64,6 +70,7 @@ def XOR(bits1, bits2):
 	
 	return output
 
+### Processes the right part of the key and permutes it ###
 def process_right(right, key) :
 	new_right = XOR(permute_dicts(right, constDES["E"][0]), key)	
 	blocks = get_blocks(new_right)
@@ -84,7 +91,7 @@ def process_right(right, key) :
 	return new_right
 
 
-
+###  ###
 def circle(left, right, key) :
 	new_right = process_right(right, key)
 		

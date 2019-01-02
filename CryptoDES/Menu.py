@@ -18,28 +18,13 @@ def print_main_menu():
 	choice = input("Enter your choice [1 or 2]: ")
 
 	cls()
+
 	if choice == "1":
-		print_output_method_menu(True)
+		print_message_menu(True)
+
 	elif choice == "2":
-		print_output_method_menu(False)
-	else:
-		input("Wrong option selection. Enter any key to try again.")
+		print_message_menu(False)
 
-def print_output_method_menu(encrypt):
-	print(30 * "-" , "OUTPUT METHOD" , 30 * "-")
-	print("Choose if you want to proceed with files or not:")
-	print("1. With files")
-	#print("2. Not with files")
-	print(67 * "-")
-
-	#choice = input("Enter your choice [1 or 2]: ")
-	choice = input("Enter your choice [1]: ")
-
-	cls()
-	if choice == "1":
-		print_message_menu(encrypt)
-	#elif choice == "2":
-	#	write_message_menu(encrypt)
 	else:
 		input("Wrong option selection. Enter any key to try again.")
 
@@ -49,12 +34,16 @@ def print_message_menu(encrypt):
 	print(67 * "-")
 
 	cls()
+
 	if os.path.isdir(message_file_path):
 		input("Target path is a directory. Enter any key to try again..")
+
 	elif os.path.exists(message_file_path) == False:
 		input("Target path doesn't exist. Enter any key to try again..")
+
 	elif os.path.exists(message_file_path) and os.path.isdir(message_file_path) == False:
 		print_key_menu(encrypt, message_file_path)
+
 	else:
 		input("Wrong option selection or invalid DES message. Enter any key to try again.")
 
@@ -64,12 +53,16 @@ def print_key_menu(encrypt, message_file_path):
 	print(67 * "-")
 	
 	cls()
+
 	if os.path.isdir(key_file_path):
 		input("Target path is a directory. Enter any key to try again..")
+
 	elif os.path.exists(key_file_path) == False:
 		input("Target path doesn't exist. Enter any key to try again..")
+
 	elif os.path.exists(key_file_path) and os.path.isdir(key_file_path) == False:
 		print_output_menu(encrypt, message_file_path, key_file_path)
+
 	else:
 		input("Wrong option selection or invalid DES key. Enter any key to try again..")
 
@@ -79,8 +72,10 @@ def print_output_menu(encrypt, message_file_path, key_file_path):
 	print(67 * "-")
 	
 	cls()
+
 	if os.path.exists(output_file_path) == True and os.path.isdir(output_file_path):
 		write_output(encrypt, key_file_path, message_file_path, output_file_path)
+
 	else:
 		input("Wrong path entered. Enter any key to try again..")
 
@@ -105,38 +100,6 @@ def write_output(encrypt, key_file_path, message_file_path, output_file_path):
 	
 	output_file.close()
 
-#def write_message_menu(encrypt):
-#	print(30 * "-" , "MESSAGE" , 30 * "-")
-#	print("Enter your message then presse CTRL + Z or CTRL + D to continue:\n")
-#	message = sys.stdin.readlines()
-#	message = "".join(message)
-#	print(67 * "-")
-
-#	cls()
-#	if message:
-#		write_key_menu(encrypt, message)
-#	else:
-#		input("Invalid DES message. Enter any key to try again.")
-
-#def write_key_menu(encrypt, message):
-#	print(30 * "-" , "KEY" , 30 * "-")
-#	key = input("Enter your key: ")
-#	print(67 * "-")
-
-#	cls()
-#	if key:
-#		print_output(encrypt, message, key)
-#	else:
-#		input("Invalid DES key. Enter any key from your keyboard to try again.")
-
-#def print_output(encrypt, message, key):
-#	output = ""
-
-#	if(encrypt): output = DES_encrypt(message, key)
-#	else: output = DES_decrypt(message, key)
-
-#	print(output)
-
-
+### MAIN LOOP ###
 while loop:
 	print_main_menu()
