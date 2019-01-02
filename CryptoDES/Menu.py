@@ -26,7 +26,7 @@ def print_main_menu():
 		print_message_menu(False)
 
 	else:
-		input("Wrong option selection. Enter any key to try again.")
+		input("Wrong option selection. Enter any key to try again...")
 
 def print_message_menu(encrypt):
 	print(30 * "-" , "MESSAGE" , 30 * "-")
@@ -45,7 +45,7 @@ def print_message_menu(encrypt):
 		print_key_menu(encrypt, message_file_path)
 
 	else:
-		input("Wrong option selection or invalid DES message. Enter any key to try again.")
+		input("Wrong option selection or invalid DES message. Enter any key to try again...")
 
 def print_key_menu(encrypt, message_file_path):
 	print(30 * "-" , "KEY" , 30 * "-")
@@ -64,7 +64,7 @@ def print_key_menu(encrypt, message_file_path):
 		print_output_menu(encrypt, message_file_path, key_file_path)
 
 	else:
-		input("Wrong option selection or invalid DES key. Enter any key to try again..")
+		input("Wrong option selection or invalid DES key. Enter any key to try again...")
 
 def print_output_menu(encrypt, message_file_path, key_file_path):
 	print(30 * "-" , "OUTPUT" , 30 * "-")
@@ -77,7 +77,7 @@ def print_output_menu(encrypt, message_file_path, key_file_path):
 		write_output(encrypt, key_file_path, message_file_path, output_file_path)
 
 	else:
-		input("Wrong path entered. Enter any key to try again..")
+		input("Wrong path entered OR path is not a directory OR path does not exist. Enter any key to try again...")
 
 def write_output(encrypt, key_file_path, message_file_path, output_file_path):
 	output_file = open(os.path.join(output_file_path, "Output.txt"), "w+")
