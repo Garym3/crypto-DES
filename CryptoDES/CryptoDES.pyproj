@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>3713b130-01e0-4a36-8e4d-b4d865727e78</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>CryptoDES.py</StartupFile>
+    <StartupFile>Menu.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,12 +22,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConvAlphaBin.py" />
-    <Compile Include="CryptoDES.py" />
+    <Compile Include="Menu.py" />
     <Compile Include="DES.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Extract_ConstantesDES.py" />
-    <Compile Include="module1.py">
+    <Compile Include="Utils.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
