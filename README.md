@@ -1,4 +1,4 @@
-# crypto-DES
+# Crypto-DES
 
 LEFEBVRE Olivier
 
